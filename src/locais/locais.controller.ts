@@ -40,6 +40,6 @@ export class LocaisController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.locaisService.remove(+id);
+    return this.locaisService.delete(id);
   }
 }

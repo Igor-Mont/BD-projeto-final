@@ -33,4 +33,8 @@ export class LocaisInMemoryRepository implements ILocaisRepository {
 
     return local ?? null;
   }
+
+  async delete(id: string): Promise<void> {
+    this.locais = this.locais.filter((local) => local.id !== id);
+  }
 }

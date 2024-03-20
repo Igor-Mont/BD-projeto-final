@@ -25,7 +25,7 @@ export class LocaisService {
     return await this.locaisRepository.findAll();
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.locaisRepository.findOne(id);
   }
 
@@ -33,7 +33,7 @@ export class LocaisService {
     return `This action updates a #${id} locai`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} locai`;
+  async delete(id: string) {
+    return await this.locaisRepository.delete(id);
   }
 }

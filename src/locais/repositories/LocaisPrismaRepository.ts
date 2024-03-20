@@ -38,4 +38,12 @@ export class LocaisPrismaRepository implements ILocaisRepository {
       },
     });
   }
+
+  async delete(id: string): Promise<void> {
+    await this.prismaService.local.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }

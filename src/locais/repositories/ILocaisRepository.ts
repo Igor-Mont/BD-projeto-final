@@ -11,4 +11,6 @@ export abstract class ILocaisRepository {
   abstract findAll(): Promise<Local[]>;
 
   abstract findOne(id: string): Promise<Local | null>;
+
+  abstract delete(id: string): Promise<void>;
 }
