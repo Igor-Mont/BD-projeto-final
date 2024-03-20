@@ -25,8 +25,8 @@ export class LocaisService {
     return await this.locaisRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} locai`;
+  findOne(id: string) {
+    return this.locaisRepository.findOne(id);
   }
 
   update(id: number, updateLocalDto: UpdateLocalDto) {

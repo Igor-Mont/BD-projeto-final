@@ -27,4 +27,10 @@ export class LocaisInMemoryRepository implements ILocaisRepository {
   async findAll(): Promise<Local[]> {
     return [...this.locais];
   }
+
+  async findOne(id: string): Promise<Local | null> {
+    const local = this.locais.find((currentLocal) => currentLocal.id === id);
+
+    return local ?? null;
+  }
 }

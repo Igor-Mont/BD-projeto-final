@@ -9,4 +9,6 @@ export abstract class ILocaisRepository {
   abstract localAlreadyExists(data: Optional<Local>): Promise<boolean>;
 
   abstract findAll(): Promise<Local[]>;
+
+  abstract findOne(id: string): Promise<Local | null>;
 }

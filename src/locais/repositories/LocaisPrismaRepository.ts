@@ -30,4 +30,12 @@ export class LocaisPrismaRepository implements ILocaisRepository {
   async findAll(): Promise<Local[]> {
     return await this.prismaService.local.findMany({});
   }
+
+  async findOne(id: string): Promise<Local | null> {
+    return await this.prismaService.local.findFirst({
+      where: {
+        id,
+      },
+    });
+  }
 }

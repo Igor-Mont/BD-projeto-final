@@ -75,4 +75,20 @@ describe('LocaisService', () => {
 
     expect(locations).toHaveLength(2);
   });
+
+  it('should be able to find one local by id', async () => {
+    const local = await locaisService.create({
+      bairro: 'Bairro A',
+      capacidade: 1000,
+      CEP: '49100000',
+      cidade: 'Cidade X',
+      logradouro: 'Rua C',
+      numero: 12,
+      UF: 'SE',
+    });
+
+    const findedLocal = await locaisService.findOne(local.id);
+
+    expect(findedLocal).toEqual(local);
+  });
 });

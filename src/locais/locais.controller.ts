@@ -30,7 +30,7 @@ export class LocaisController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.locaisService.findOne(+id);
+    return this.locaisService.findOne(id);
   }
 
   @Patch(':id')
