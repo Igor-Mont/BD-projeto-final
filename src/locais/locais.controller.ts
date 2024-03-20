@@ -7,18 +7,20 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CreateLocalDto } from './dto/create-local.dto';
 import { UpdateLocalDto } from './dto/update-local.dto';
 import { LocaisService } from './locais.service';
 
+@ApiTags('Locais')
 @Controller('locais')
 export class LocaisController {
   constructor(private readonly locaisService: LocaisService) {}
 
   @Post()
-  create(@Body() createLocaiDto: CreateLocalDto) {
-    return this.locaisService.create(createLocaiDto);
+  async create(@Body() createLocalDto: CreateLocalDto) {
+    return await this.locaisService.create(createLocalDto);
   }
 
   @Get()
