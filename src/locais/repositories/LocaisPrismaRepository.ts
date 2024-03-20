@@ -26,4 +26,8 @@ export class LocaisPrismaRepository implements ILocaisRepository {
       },
     }));
   }
+
+  async findAll(): Promise<Local[]> {
+    return await this.prismaService.local.findMany({});
+  }
 }

@@ -7,4 +7,6 @@ export abstract class ILocaisRepository {
   abstract create(createLocalDto: CreateLocalDto): Promise<Local>;
 
   abstract localAlreadyExists(data: Optional<Local>): Promise<boolean>;
+
+  abstract findAll(): Promise<Local[]>;
 }

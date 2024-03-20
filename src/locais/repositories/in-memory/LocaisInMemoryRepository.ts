@@ -23,4 +23,8 @@ export class LocaisInMemoryRepository implements ILocaisRepository {
       return shallowEqual(potentialDuplicateLocal, localWithoutId);
     });
   }
+
+  async findAll(): Promise<Local[]> {
+    return [...this.locais];
+  }
 }

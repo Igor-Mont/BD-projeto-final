@@ -49,4 +49,30 @@ describe('LocaisService', () => {
       }),
     ).rejects.toEqual(new ConflictException('Esse local já está registrado.'));
   });
+
+  it('should be able to list all locations', async () => {
+    await locaisService.create({
+      bairro: 'Bairro A',
+      capacidade: 1000,
+      CEP: '49100000',
+      cidade: 'Cidade X',
+      logradouro: 'Rua C',
+      numero: 12,
+      UF: 'SE',
+    });
+
+    await locaisService.create({
+      bairro: 'Bairro B',
+      capacidade: 1000,
+      CEP: '49100000',
+      cidade: 'Cidade X',
+      logradouro: 'Rua C',
+      numero: 12,
+      UF: 'SE',
+    });
+
+    const locations = await locaisService.findAll();
+
+    expect(locations).toHaveLength(2);
+  });
 });

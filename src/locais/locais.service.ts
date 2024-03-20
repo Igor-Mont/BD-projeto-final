@@ -21,8 +21,8 @@ export class LocaisService {
     return newLocal as Local;
   }
 
-  findAll() {
-    return `This action returns all locais`;
+  async findAll(): Promise<Local[]> {
+    return await this.locaisRepository.findAll();
   }
 
   findOne(id: number) {
