@@ -1,9 +1,9 @@
 version: '3.0'
 
 services:
-  bar-cultural-db:
+  projeto-final:
     image: postgres:13
-    container_name: bar-cultural-db
+    container_name: projeto-final
     restart: always
     ports:
       - 5432:5432

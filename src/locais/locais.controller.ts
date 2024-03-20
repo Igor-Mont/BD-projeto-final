@@ -1,14 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+
+import { CreateLocalDto } from './dto/create-local.dto';
+import { UpdateLocalDto } from './dto/update-local.dto';
 import { LocaisService } from './locais.service';
-import { CreateLocaiDto } from './dto/create-locai.dto';
-import { UpdateLocaiDto } from './dto/update-locai.dto';
 
 @Controller('locais')
 export class LocaisController {
   constructor(private readonly locaisService: LocaisService) {}
 
   @Post()
-  create(@Body() createLocaiDto: CreateLocaiDto) {
+  create(@Body() createLocaiDto: CreateLocalDto) {
     return this.locaisService.create(createLocaiDto);
   }
 
@@ -23,7 +32,7 @@ export class LocaisController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLocaiDto: UpdateLocaiDto) {
+  update(@Param('id') id: string, @Body() updateLocaiDto: UpdateLocalDto) {
     return this.locaisService.update(+id, updateLocaiDto);
   }
 
