@@ -35,7 +35,7 @@ export class LocaisController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateLocaiDto: UpdateLocalDto) {
-    return this.locaisService.update(+id, updateLocaiDto);
+    return this.locaisService.update(id, updateLocaiDto);
   }
 
   @Delete(':id')

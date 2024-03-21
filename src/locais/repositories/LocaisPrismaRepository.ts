@@ -4,6 +4,7 @@ import { CreateLocalDto } from '@src/locais/dto/create-local.dto';
 import { Local } from '@src/locais/entities/local.entity';
 
 import { PrismaService } from '../../prisma/prisma.service';
+import { UpdateLocalDto } from '../dto/update-local.dto';
 import { ILocaisRepository } from './ILocaisRepository';
 
 type Optional<T> = { [K in keyof T]?: T[K] };
@@ -45,5 +46,14 @@ export class LocaisPrismaRepository implements ILocaisRepository {
         id,
       },
     });
+  }
+
+  async update(id: string, updateLocalDto: UpdateLocalDto): Promise<Local> {
+    const updatedLocal = await this.prismaService.local.update({
+      where: { id },
+      data: updateLocalDto,
+    });
+
+    return updatedLocal;
   }
 }

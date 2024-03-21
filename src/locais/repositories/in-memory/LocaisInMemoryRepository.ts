@@ -1,4 +1,5 @@
 import { CreateLocalDto } from '@src/locais/dto/create-local.dto';
+import { UpdateLocalDto } from '@src/locais/dto/update-local.dto';
 
 import { shallowEqual } from '../../../utils/shallow-equal';
 import { Local } from '../../entities/local.entity';
@@ -36,5 +37,19 @@ export class LocaisInMemoryRepository implements ILocaisRepository {
 
   async delete(id: string): Promise<void> {
     this.locais = this.locais.filter((local) => local.id !== id);
+  }
+
+  async update(id: string, updateLocalDto: UpdateLocalDto): Promise<Local> {
+    const localToUpdated = (await this.findOne(id)) as Local;
+    this.locais = this.locais.map((currentLocal) => {
+      if (id === currentLocal.id) {
+        return { ...localToUpdated, ...updateLocalDto };
+      }
+
+      return currentLocal;
+    });
+
+    const updatedLocal = (await this.findOne(id)) as Local;
+    return updatedLocal;
   }
 }

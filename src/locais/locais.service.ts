@@ -29,8 +29,8 @@ export class LocaisService {
     return this.locaisRepository.findOne(id);
   }
 
-  update(id: number, updateLocalDto: UpdateLocalDto) {
-    return `This action updates a #${id} locai`;
+  async update(id: string, updateLocalDto: UpdateLocalDto): Promise<Local> {
+    return await this.locaisRepository.update(id, updateLocalDto);
   }
 
   async delete(id: string) {

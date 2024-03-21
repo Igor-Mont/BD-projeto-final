@@ -1,5 +1,6 @@
 import { ConflictException } from '@nestjs/common';
 
+import { UpdateLocalDto } from './dto/update-local.dto';
 import { LocaisService } from './locais.service';
 import { ILocaisRepository } from './repositories/ILocaisRepository';
 import { LocaisInMemoryRepository } from './repositories/in-memory/LocaisInMemoryRepository';
@@ -112,5 +113,34 @@ describe('LocaisService', () => {
     const locations = await locaisService.findAll();
 
     expect(locations).toHaveLength(0);
+  });
+
+  it('should be able to update one local by id', async () => {
+    const local = await locaisService.create({
+      bairro: 'Bairro A',
+      capacidade: 1000,
+      CEP: '49100000',
+      cidade: 'Cidade X',
+      logradouro: 'Rua C',
+      numero: 12,
+      UF: 'SE',
+    });
+
+    const updateLocalDto = {
+      bairro: 'Bairro Atualizado',
+      capacidade: 2000,
+      CEP: '49100111',
+      cidade: 'Cidade Atualizada',
+      logradouro: 'Rua Atualizada',
+      numero: 123,
+      UF: 'SP',
+    } as UpdateLocalDto;
+
+    const { id, ...findedLocal } = await locaisService.update(
+      local.id,
+      updateLocalDto,
+    );
+
+    expect(findedLocal).toEqual(updateLocalDto);
   });
 });
