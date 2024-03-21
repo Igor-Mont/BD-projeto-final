@@ -12,3 +12,16 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Local {
+  id         String  @db.Uuid() @id(map: "pk_locais") @default(uuid())
+  capacidade Int
+  CEP        String @db.VarChar(8)
+  logradouro String @db.VarChar(50)
+  numero     Int
+  bairro     String @db.VarChar(25)
+  cidade     String @db.VarChar(25)
+  UF         String @db.VarChar(2)
+
+  @@map("locais")
+}
