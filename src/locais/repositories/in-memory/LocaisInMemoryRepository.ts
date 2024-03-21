@@ -9,11 +9,11 @@ export class LocaisInMemoryRepository implements ILocaisRepository {
   private locais: Local[] = [];
 
   async create(createLocalDto: CreateLocalDto): Promise<Local> {
-    const new_local = new Local();
-    Object.assign(new_local, { ...createLocalDto });
+    const newLocal = new Local();
+    Object.assign(newLocal, { ...createLocalDto });
 
-    this.locais.push(new_local);
-    return new_local as Local;
+    this.locais.push(newLocal);
+    return newLocal as Local;
   }
 
   async localAlreadyExists(

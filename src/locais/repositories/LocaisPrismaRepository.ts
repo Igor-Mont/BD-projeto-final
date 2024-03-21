@@ -13,11 +13,11 @@ export class LocaisPrismaRepository implements ILocaisRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(createLocalDto: CreateLocalDto): Promise<Local> {
-    const new_local = await this.prismaService.local.create({
+    const newLocal = await this.prismaService.local.create({
       data: createLocalDto,
     });
 
-    return new_local as Local;
+    return newLocal as Local;
   }
 
   async localAlreadyExists(data: Optional<Local>): Promise<boolean> {
