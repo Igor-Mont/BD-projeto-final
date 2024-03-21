@@ -19,9 +19,14 @@ export class LocaisInMemoryRepository implements ILocaisRepository {
   async localAlreadyExists(
     potentialDuplicateLocal: Optional<Local>,
   ): Promise<boolean> {
+    const { capacidade, ...potentialDuplicateLocalWithoutCapacity } =
+      potentialDuplicateLocal;
     return !!this.locais.find((local) => {
-      const { id, ...localWithoutId } = local;
-      return shallowEqual(potentialDuplicateLocal, localWithoutId);
+      const { id, capacidade, ...localWithoutIdAndCapacity } = local;
+      return shallowEqual(
+        potentialDuplicateLocalWithoutCapacity,
+        localWithoutIdAndCapacity,
+      );
     });
   }
 

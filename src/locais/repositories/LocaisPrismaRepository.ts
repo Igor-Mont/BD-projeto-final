@@ -21,9 +21,10 @@ export class LocaisPrismaRepository implements ILocaisRepository {
   }
 
   async localAlreadyExists(data: Optional<Local>): Promise<boolean> {
+    const { capacidade, ...dataToBeSearched } = data;
     return !!(await this.prismaService.local.findFirst({
       where: {
-        ...data,
+        ...dataToBeSearched,
       },
     }));
   }
