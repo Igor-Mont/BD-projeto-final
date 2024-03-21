@@ -29,19 +29,19 @@ export class LocaisService {
     return await this.locaisRepository.findAll();
   }
 
-  async findOne(id: string) {
-    return await this.locaisRepository.findOne(id);
+  async findOne(id: string): Promise<Local> {
+    const findedLocal = await this.locaisRepository.findOne(id);
+    if (!findedLocal) throw new NotFoundException('Local não encontrado.');
+    return findedLocal;
   }
 
   async update(id: string, updateLocalDto: UpdateLocalDto): Promise<Local> {
-    const exists = await this.findOne(id);
-    if (!exists) throw new NotFoundException('Local não encontrado.');
+    await this.findOne(id);
     return await this.locaisRepository.update(id, updateLocalDto);
   }
 
   async delete(id: string): Promise<void> {
-    const exists = await this.findOne(id);
-    if (!exists) throw new NotFoundException('Local não encontrado.');
+    await this.findOne(id);
     return await this.locaisRepository.delete(id);
   }
 }

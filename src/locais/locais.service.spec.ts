@@ -93,6 +93,12 @@ describe('LocaisService', () => {
     expect(findedLocal).toEqual(local);
   });
 
+  it('should not be able to find one local if local not exists', async () => {
+    await expect(locaisService.findOne('INVALID_ID')).rejects.toEqual(
+      new NotFoundException('Local não encontrado.'),
+    );
+  });
+
   it('should be able to delete one local by id', async () => {
     const local = await locaisService.create({
       bairro: 'Bairro A',
