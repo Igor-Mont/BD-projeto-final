@@ -1,5 +1,6 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 
+import { CreateLocalDto } from './dto/create-local.dto';
 import { UpdateLocalDto } from './dto/update-local.dto';
 import { LocaisService } from './locais.service';
 import { ILocaisRepository } from './repositories/ILocaisRepository';
@@ -7,6 +8,19 @@ import { LocaisInMemoryRepository } from './repositories/in-memory/LocaisInMemor
 
 let locaisService: LocaisService;
 let locaisInMemoryRepository: ILocaisRepository;
+
+const makeFakeLocalDto = (): CreateLocalDto => {
+  return {
+    bairro: 'Bairro A',
+    capacidade: 1000,
+    CEP: '49100000',
+    cidade: 'Cidade X',
+    logradouro: 'Rua C',
+    numero: 12,
+    UF: 'SE',
+  };
+};
+
 describe('LocaisService', () => {
   beforeEach(async () => {
     locaisInMemoryRepository = new LocaisInMemoryRepository();
@@ -14,29 +28,13 @@ describe('LocaisService', () => {
   });
 
   it('should be able create a local', async () => {
-    const local = await locaisService.create({
-      bairro: 'Bairro A',
-      capacidade: 1000,
-      CEP: '49100000',
-      cidade: 'Cidade X',
-      logradouro: 'Rua C',
-      numero: 12,
-      UF: 'SE',
-    });
+    const local = await locaisService.create(makeFakeLocalDto());
 
     expect(local).toHaveProperty('id');
   });
 
   it('should not be able create a duplicate local', async () => {
-    await locaisService.create({
-      bairro: 'Bairro A',
-      capacidade: 1000,
-      CEP: '49100000',
-      cidade: 'Cidade X',
-      logradouro: 'Rua C',
-      numero: 12,
-      UF: 'SE',
-    });
+    await locaisService.create(makeFakeLocalDto());
 
     await expect(
       locaisService.create({
@@ -52,15 +50,7 @@ describe('LocaisService', () => {
   });
 
   it('should be able to list all locations', async () => {
-    await locaisService.create({
-      bairro: 'Bairro A',
-      capacidade: 1000,
-      CEP: '49100000',
-      cidade: 'Cidade X',
-      logradouro: 'Rua C',
-      numero: 12,
-      UF: 'SE',
-    });
+    await locaisService.create(makeFakeLocalDto());
 
     await locaisService.create({
       bairro: 'Bairro B',
@@ -78,15 +68,7 @@ describe('LocaisService', () => {
   });
 
   it('should be able to find one local by id', async () => {
-    const local = await locaisService.create({
-      bairro: 'Bairro A',
-      capacidade: 1000,
-      CEP: '49100000',
-      cidade: 'Cidade X',
-      logradouro: 'Rua C',
-      numero: 12,
-      UF: 'SE',
-    });
+    const local = await locaisService.create(makeFakeLocalDto());
 
     const findedLocal = await locaisService.findOne(local.id);
 
@@ -100,15 +82,7 @@ describe('LocaisService', () => {
   });
 
   it('should be able to delete one local by id', async () => {
-    const local = await locaisService.create({
-      bairro: 'Bairro A',
-      capacidade: 1000,
-      CEP: '49100000',
-      cidade: 'Cidade X',
-      logradouro: 'Rua C',
-      numero: 12,
-      UF: 'SE',
-    });
+    const local = await locaisService.create(makeFakeLocalDto());
 
     const findedLocal = await locaisService.findOne(local.id);
 
@@ -128,15 +102,7 @@ describe('LocaisService', () => {
   });
 
   it('should be able to update one local by id', async () => {
-    const local = await locaisService.create({
-      bairro: 'Bairro A',
-      capacidade: 1000,
-      CEP: '49100000',
-      cidade: 'Cidade X',
-      logradouro: 'Rua C',
-      numero: 12,
-      UF: 'SE',
-    });
+    const local = await locaisService.create(makeFakeLocalDto());
 
     const updateLocalDto = {
       bairro: 'Bairro Atualizado',
