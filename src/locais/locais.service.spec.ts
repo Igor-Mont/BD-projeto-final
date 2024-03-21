@@ -1,4 +1,4 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 import { UpdateLocalDto } from './dto/update-local.dto';
 import { LocaisService } from './locais.service';
@@ -115,6 +115,12 @@ describe('LocaisService', () => {
     expect(locations).toHaveLength(0);
   });
 
+  it('should not be able to delete one local if local not exists', async () => {
+    await expect(locaisService.delete('INVALID_ID')).rejects.toEqual(
+      new NotFoundException('Local não encontrado.'),
+    );
+  });
+
   it('should be able to update one local by id', async () => {
     const local = await locaisService.create({
       bairro: 'Bairro A',
@@ -142,5 +148,15 @@ describe('LocaisService', () => {
     );
 
     expect(findedLocal).toEqual(updateLocalDto);
+  });
+
+  it('should not be able to update one local if local not exists', async () => {
+    const updateLocalDto = {
+      bairro: 'Bairro Atualizado',
+    } as UpdateLocalDto;
+
+    const updatedLocal = await expect(
+      locaisService.update('INVALID_ID', updateLocalDto),
+    ).rejects.toEqual(new NotFoundException('Local não encontrado.'));
   });
 });

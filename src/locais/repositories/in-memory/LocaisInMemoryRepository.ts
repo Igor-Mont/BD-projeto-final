@@ -41,6 +41,7 @@ export class LocaisInMemoryRepository implements ILocaisRepository {
 
   async update(id: string, updateLocalDto: UpdateLocalDto): Promise<Local> {
     const localToUpdated = (await this.findOne(id)) as Local;
+
     this.locais = this.locais.map((currentLocal) => {
       if (id === currentLocal.id) {
         return { ...localToUpdated, ...updateLocalDto };

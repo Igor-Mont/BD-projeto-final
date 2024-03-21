@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CreateLocalDto } from './dto/create-local.dto';
 import { UpdateLocalDto } from './dto/update-local.dto';
@@ -26,14 +30,18 @@ export class LocaisService {
   }
 
   async findOne(id: string) {
-    return this.locaisRepository.findOne(id);
+    return await this.locaisRepository.findOne(id);
   }
 
   async update(id: string, updateLocalDto: UpdateLocalDto): Promise<Local> {
+    const exists = await this.findOne(id);
+    if (!exists) throw new NotFoundException('Local não encontrado.');
     return await this.locaisRepository.update(id, updateLocalDto);
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<void> {
+    const exists = await this.findOne(id);
+    if (!exists) throw new NotFoundException('Local não encontrado.');
     return await this.locaisRepository.delete(id);
   }
 }
