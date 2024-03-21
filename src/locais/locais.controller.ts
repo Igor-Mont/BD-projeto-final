@@ -12,8 +12,11 @@ import {
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { IsUUIDPipe } from '@utils/pipes/is-uuid-pipe';
 
 import { CreateLocalDto } from './dto/create-local.dto';
 import { UpdateLocalDto } from './dto/update-local.dto';
@@ -37,25 +40,35 @@ export class LocaisController {
   }
 
   @Get()
+  @ApiOkResponse({ description: 'Todos os registros listados com sucesso.' })
   findAll() {
     return this.locaisService.findAll();
   }
 
+  @ApiBadRequestResponse({ description: 'Parâmetro :id precisa ser um UUID.' })
+  @ApiOkResponse({ description: 'Registro listado com sucesso.' })
+  @ApiBadRequestResponse({ description: 'Parâmetro :id precisa ser um UUID.' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', IsUUIDPipe) id: string) {
     return this.locaisService.findOne(id);
   }
 
   @ApiNotFoundResponse({ description: 'Local não encontrado.' })
   @ApiBadRequestResponse({ description: 'Payload incorreto.' })
+  @ApiBadRequestResponse({ description: 'Parâmetro :id precisa ser um UUID.' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLocaiDto: UpdateLocalDto) {
+  update(
+    @Param('id', IsUUIDPipe) id: string,
+    @Body() updateLocaiDto: UpdateLocalDto,
+  ) {
     return this.locaisService.update(id, updateLocaiDto);
   }
 
   @ApiNotFoundResponse({ description: 'Local não encontrado.' })
+  @ApiOkResponse({ description: 'Registro deletado com sucesso.' })
+  @ApiBadRequestResponse({ description: 'Parâmetro :id precisa ser um UUID.' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', IsUUIDPipe) id: string) {
     return this.locaisService.delete(id);
   }
 }
