@@ -13,14 +13,18 @@ import { IHorariosRepository } from './repositories/IHorariosPrismaRepository';
 export class HorariosService {
   constructor(private horariosRepository: IHorariosRepository){}
  
-  async create({ hora_inicial, hora_final }: CreateHorarioDto): Promise<Horario> {
+  async create({ hora_inicial, hora_final, diasDiferentes}: CreateHorarioDto): Promise<Horario> {
     const [hi, mi, si] = hora_inicial.split(":").map(Number)
     const [hf, mf, sf] = hora_final.split(":").map(Number)
     const dateInicial = new Date(2024, 0, 1, hi-3, mi, si).toISOString()
     const dateFinal = new Date(2024, 0, 1, hf-3, mf, sf).toISOString()
+
+    if (!diasDiferentes){
+      if(dateInicial <= dateFinal) throw new Error('Os horários devem estar em dias diferentes.');
+    }
     const horario = await this.horariosRepository.create({
       hora_inicial: dateInicial,
-      hora_final: dateFinal
+      hora_final: dateFinal,
     });
     console.log(dateInicial, hi, mi, si);
     return horario;
