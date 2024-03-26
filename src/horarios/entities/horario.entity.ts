@@ -10,7 +10,7 @@ export class Horario {
   hora_inicial: Date;
 
   @ApiProperty()
-  hora_final: Date;
+  hora_final: Date | null;
 
   constructor() {
     this.id = randomUUID();
