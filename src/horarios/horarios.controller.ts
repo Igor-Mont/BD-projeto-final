@@ -43,16 +43,16 @@ export class HorariosController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.horariosService.findOne(+id);
+    return this.horariosService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateHorarioDto: UpdateHorarioDto) {
-    return this.horariosService.update(+id, updateHorarioDto);
+    return this.horariosService.update(id, updateHorarioDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.horariosService.remove(+id);
+    return this.horariosService.delete(id);
   }
 }
