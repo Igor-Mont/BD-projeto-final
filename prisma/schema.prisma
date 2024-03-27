@@ -25,3 +25,11 @@ model Local {
 
   @@map("locais")
 }
+
+model Horario {
+  id         String  @db.Uuid() @id(map: "pk_horarios") @default(uuid())
+  hora_inicial DateTime @db.Time
+  hora_final DateTime? @db.Time
+
+  @@map("horarios")
+}
