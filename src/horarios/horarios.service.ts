@@ -20,8 +20,9 @@ export class HorariosService {
     const dateFinal = new Date(2024, 0, 1, hf-3, mf, sf).toISOString()
 
     if (!diasDiferentes){
-      if(dateInicial <= dateFinal) throw new Error('Os horários devem estar em dias diferentes.');
+      if(dateInicial >= dateFinal) throw new ConflictException('Os horários devem estar em dias diferentes.');
     }
+    
     const horario = await this.horariosRepository.create({
       hora_inicial: dateInicial,
       hora_final: dateFinal,
@@ -37,23 +38,15 @@ export class HorariosService {
 
   async findOne(id: string): Promise<Horario> {
     const horario = await this.horariosRepository.findOne(id);
-    if (!horario) {
-      throw new NotFoundException(`Horario não encontrado.`);
-    }
+    if (!horario) throw new NotFoundException(`Horario não encontrado.`);
     return horario;
   }
 
-  async update(id: string, updateHorarioDto: UpdateHorarioDto): Promise<Horario> {
-    if (updateHorarioDto.hora_inicial === undefined || updateHorarioDto.hora_final === undefined) {
-      throw new Error("Hora inicial ou hora final não estão definidas.");
-    }
-    const [hi, mi, si] = updateHorarioDto.hora_inicial.split(":").map(Number)
-    const [hf, mf, sf] = updateHorarioDto.hora_final.split(":").map(Number)
-    const existingHorario = await this.horariosRepository.findOne(id);
+  async update(id: string, {hora_inicial, hora_final}: UpdateHorarioDto): Promise<Horario> {
+    await this.findOne(id);
     
-    if (!existingHorario) {
-      throw new NotFoundException(`Horario não encontrado.`);
-    }
+    const [hi, mi, si] = hora_inicial.split(":").map(Number)
+    const [hf, mf, sf] = hora_final.split(":").map(Number)
     
     const dateInicial = new Date(2024, 0, 1, hi-3, mi, si).toISOString()
     const dateFinal = new Date(2024, 0, 1, hf-3, mf, sf).toISOString()
@@ -65,14 +58,8 @@ export class HorariosService {
     return updatedHorario;
   }
 
-
-  
-
   async delete(id: string): Promise<void> {
-    const existingHorario = await this.horariosRepository.findOne(id);
-    if (!existingHorario) {
-      throw new NotFoundException(`Horario não encontrado.`);
-    }
+    await this.findOne(id);
     await this.horariosRepository.delete(id);
   }
 }
