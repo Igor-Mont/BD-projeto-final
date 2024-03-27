@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString, Matches } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, Matches } from 'class-validator';
 
 export class CreateHorarioDto {
   @ApiProperty({ example: '08:00:00' })
@@ -14,5 +14,6 @@ export class CreateHorarioDto {
 
   @ApiProperty({ example: true })
   @IsBoolean()
+  @IsOptional()
   diasDiferentes?: boolean;
 }
