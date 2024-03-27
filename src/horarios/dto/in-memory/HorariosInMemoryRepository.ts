@@ -3,6 +3,7 @@ import { UpdateHorarioDto } from '@src/horarios/dto/update-horario.dto';
 import { Horario } from '../../entities/horario.entity';
 import { IHorariosRepository } from '@src/horarios/repositories/IHorariosPrismaRepository';
 import { shallowEqual } from '../../../utils/shallow-equal';
+import { NotFoundException } from '@nestjs/common';
 
 type Optional<T> = { [K in keyof T]?: T[K] };
 
@@ -31,11 +32,7 @@ export class HorariosInMemoryRepository implements IHorariosRepository {
   }
 
   async update(id: string, updateHorarioDto: UpdateHorarioDto): Promise<Horario> {
-    const horarioToBeUpdated = await this.findOne(id);
-
-    if (!horarioToBeUpdated) {
-      throw new Error('Horario not found');
-    }
+    const horarioToBeUpdated = (await this.findOne(id)) as Horario;
 
     Object.assign(horarioToBeUpdated, updateHorarioDto);
 
