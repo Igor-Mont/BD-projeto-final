@@ -7,15 +7,18 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { IsUUIDPipe } from '@utils/pipes/is-uuid-pipe';
+
+import { IsUUIDPipe } from '../utils/pipes/is-uuid-pipe';
 import { CreateHorarioDto } from './dto/create-horario.dto';
 import { UpdateHorarioDto } from './dto/update-horario.dto';
 import { Horario } from './entities/horario.entity';
@@ -30,6 +33,8 @@ export class HorariosController {
     description: 'Criado com sucesso.',
     type: Horario,
   })
+  @ApiConflictResponse({ description: "Os horários devem estar em dias diferentes." })
+  @ApiBadRequestResponse({ description: 'Payload incorreto.' })
   @Post()
   create(@Body() createHorarioDto: CreateHorarioDto) {
     return this.horariosService.create(createHorarioDto);
@@ -40,19 +45,27 @@ export class HorariosController {
   findAll() {
     return this.horariosService.findAll();
   }
-
+  @ApiBadRequestResponse({ description: 'Parâmetro :id precisa ser um UUID.' })
+  @ApiOkResponse({ description: 'Registro listado com sucesso.' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', IsUUIDPipe) id: string) {
     return this.horariosService.findOne(id);
   }
 
+  @ApiNotFoundResponse({ description: 'Horario não encontrado.' })
+  @ApiBadRequestResponse({ description: 'Payload incorreto.' })
+  @ApiBadRequestResponse({ description: 'Parâmetro :id precisa ser um UUID.' })
+  @ApiOkResponse({ description: 'Registro atualizado com sucesso.' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHorarioDto: UpdateHorarioDto) {
+  update(@Param('id', IsUUIDPipe) id: string, @Body() updateHorarioDto: UpdateHorarioDto) {
     return this.horariosService.update(id, updateHorarioDto);
   }
 
+  @ApiNotFoundResponse({ description: 'Horario não encontrado.' })
+  @ApiOkResponse({ description: 'Registro deletado com sucesso.' })
+  @ApiBadRequestResponse({ description: 'Parâmetro :id precisa ser um UUID.' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', IsUUIDPipe) id: string) {
     return this.horariosService.delete(id);
   }
 }
