@@ -8,6 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 
+import { IsUUIDPipe } from '@utils/pipes/is-uuid-pipe';
+
 import { AlocacoesService } from './alocacoes.service';
 import { CreateAlocacaoDto } from './dto/create-alocacao.dto';
 import { UpdateAlocacaoDto } from './dto/update-alocacao.dto';
@@ -27,8 +29,8 @@ export class AlocacoesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.alocacoesService.findOne(+id);
+  findOne(@Param('id', IsUUIDPipe) id: string) {
+    return this.alocacoesService.findOne(id);
   }
 
   @Patch(':id')
@@ -36,11 +38,11 @@ export class AlocacoesController {
     @Param('id') id: string,
     @Body() updateAlocacaoDto: UpdateAlocacaoDto,
   ) {
-    return this.alocacoesService.update(+id, updateAlocacaoDto);
+    return this.alocacoesService.update(id, updateAlocacaoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.alocacoesService.remove(+id);
+    return this.alocacoesService.remove(id);
   }
 }
