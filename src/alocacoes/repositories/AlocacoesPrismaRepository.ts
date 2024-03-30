@@ -10,16 +10,33 @@ import { IAlocacoesRepository } from './IAlocacoesPrismaRepository';
 export class AlocacoesPrismaRepository implements IAlocacoesRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createAlocacoesDto: CreateAlocacaoDto): Promise<Alocacao> {
-    const newAlocacao = await this.prismaService.alocacao.create({
-      data: createAlocacoesDto,
-    });
+  async create(
+    createAlocacoesDto: CreateAlocacaoDto,
+  ): Promise<Alocacao | null> {
+    try {
+      const newAlocacao = await this.prismaService.alocacao.create({
+        data: createAlocacoesDto,
+        select: {
+          id: true,
+          local: true,
+          horario: true,
+        },
+      });
 
-    return newAlocacao as Alocacao;
+      return newAlocacao as Alocacao;
+    } catch (err) {
+      return null;
+    }
   }
 
   async findAll(): Promise<Alocacao[]> {
-    return await this.prismaService.alocacao.findMany({});
+    return await this.prismaService.alocacao.findMany({
+      select: {
+        id: true,
+        local: true,
+        horario: true,
+      },
+    });
   }
 
   async findOne(id: string): Promise<Alocacao | null> {
@@ -27,13 +44,10 @@ export class AlocacoesPrismaRepository implements IAlocacoesRepository {
       where: {
         id,
       },
-    });
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.prismaService.alocacao.delete({
-      where: {
-        id,
+      select: {
+        id: true,
+        local: true,
+        horario: true,
       },
     });
   }
@@ -41,12 +55,35 @@ export class AlocacoesPrismaRepository implements IAlocacoesRepository {
   async update(
     id: string,
     updateAlocacoesDto: UpdateAlocacaoDto,
-  ): Promise<Alocacao> {
-    const updatedAlocacao = await this.prismaService.alocacao.update({
-      where: { id },
-      data: updateAlocacoesDto,
-    });
+  ): Promise<Alocacao | null> {
+    try {
+      const updatedAlocacao = await this.prismaService.alocacao.update({
+        where: { id },
+        data: updateAlocacoesDto,
+        select: {
+          id: true,
+          local: true,
+          horario: true,
+        },
+      });
 
-    return updatedAlocacao;
+      return updatedAlocacao;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  async delete(id: string): Promise<boolean> {
+    try {
+      await this.prismaService.alocacao.delete({
+        where: {
+          id,
+        },
+      });
+
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 }
