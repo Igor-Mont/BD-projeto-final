@@ -14,32 +14,32 @@ datasource db {
 }
 
 model Local {
-  id         String      @id(map: "pk_locais") @default(uuid()) @db.Uuid()
+  id         String     @id(map: "pk_locais") @default(uuid()) @db.Uuid()
   capacidade Int
-  CEP        String      @db.VarChar(8)
-  logradouro String      @db.VarChar(50)
+  CEP        String     @db.VarChar(8)
+  logradouro String     @db.VarChar(50)
   numero     Int
-  bairro     String      @db.VarChar(25)
-  cidade     String      @db.VarChar(25)
-  UF         String      @db.VarChar(2)
-  Alocacoes  Alocacoes[]
+  bairro     String     @db.VarChar(25)
+  cidade     String     @db.VarChar(25)
+  UF         String     @db.VarChar(2)
+  Alocacoes  Alocacao[]
 
   @@map("locais")
 }
 
 model Horario {
-  id           String      @id(map: "pk_horarios") @default(uuid()) @db.Uuid()
-  hora_inicial DateTime    @db.Time
-  hora_final   DateTime?   @db.Time
-  alocacoes    Alocacoes[]
+  id           String     @id(map: "pk_horarios") @default(uuid()) @db.Uuid()
+  hora_inicial DateTime   @db.Time
+  hora_final   DateTime?  @db.Time
+  alocacoes    Alocacao[]
 
   @@map("horarios")
 }
 
-model Alocacoes {
+model Alocacao {
   id         String  @id(map: "pk_alocacoes") @default(uuid()) @db.Uuid()
   horario_id String  @db.Uuid()
-  Horario    Horario @relation(fields: [horario_id], references: [id])
+  horario    Horario @relation(fields: [horario_id], references: [id])
   local_id   String  @db.Uuid()
   local      Local   @relation(fields: [local_id], references: [id])
 }
