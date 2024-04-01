@@ -1,27 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { CreateAlocacaoDto } from './dto/create-alocacao.dto';
 import { UpdateAlocacaoDto } from './dto/update-alocacao.dto';
+import { Alocacao } from './entities/alocacao.entity';
+import { IAlocacoesRepository } from './repositories/IAlocacoesPrismaRepository';
 
 @Injectable()
 export class AlocacoesService {
-  create(createAlocacaoDto: CreateAlocacaoDto) {
-    return 'This action adds a new alocacoe';
+  constructor(private readonly alocacoesRepository: IAlocacoesRepository) {}
+
+  async create(createAlocacaoDto: CreateAlocacaoDto): Promise<Alocacao> {
+    const alocacao = await this.alocacoesRepository.create(createAlocacaoDto);
+    if (!alocacao)
+      throw new BadRequestException('id de alocacão ou horário inválido.');
+    return alocacao;
   }
 
-  findAll() {
-    return `This action returns all alocacoes`;
+  async findAll() {
+    return await this.alocacoesRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} alocacoe`;
+  async findOne(id: string) {
+    const alocacao = await this.alocacoesRepository.findOne(id);
+    if (!alocacao) throw new BadRequestException('alocacao não existe.');
+    return alocacao;
   }
 
-  update(id: number, updateAlocacaoDto: UpdateAlocacaoDto) {
-    return `This action updates a #${id} alocacoe`;
+  async update(id: string, updateAlocacaoDto: UpdateAlocacaoDto) {
+    const updatedAlocacao = await this.alocacoesRepository.update(
+      id,
+      updateAlocacaoDto,
+    );
+
+    if (!updatedAlocacao)
+      throw new BadRequestException('verifique se todos os ids são válidos.');
+    return updatedAlocacao;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} alocacoe`;
+  async remove(id: string) {
+    const removed = await this.alocacoesRepository.delete(id);
+    if (!removed) throw new BadRequestException('alocacão não existe;');
   }
 }
