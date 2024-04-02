@@ -8,8 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 
-import { IsUUIDPipe } from '@utils/pipes/is-uuid-pipe';
-
+import { IsUUIDPipe } from '../utils/pipes/is-uuid-pipe';
 import { AlocacoesService } from './alocacoes.service';
 import { CreateAlocacaoDto } from './dto/create-alocacao.dto';
 import { UpdateAlocacaoDto } from './dto/update-alocacao.dto';
