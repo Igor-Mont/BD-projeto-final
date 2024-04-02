@@ -12,7 +12,7 @@ export class AlocacoesService {
   async create(createAlocacaoDto: CreateAlocacaoDto): Promise<Alocacao> {
     const alocacao = await this.alocacoesRepository.create(createAlocacaoDto);
     if (!alocacao)
-      throw new BadRequestException('id de alocacão ou horário inválido.');
+      throw new BadRequestException('Id de alocacão ou horário inválido.');
     return alocacao;
   }
 
@@ -22,7 +22,7 @@ export class AlocacoesService {
 
   async findOne(id: string) {
     const alocacao = await this.alocacoesRepository.findOne(id);
-    if (!alocacao) throw new BadRequestException('alocacao não existe.');
+    if (!alocacao) throw new BadRequestException('Alocacao não existe.');
     return alocacao;
   }
 
@@ -33,12 +33,12 @@ export class AlocacoesService {
     );
 
     if (!updatedAlocacao)
-      throw new BadRequestException('verifique se todos os ids são válidos.');
+      throw new BadRequestException('Verifique se todos os ids são válidos.');
     return updatedAlocacao;
   }
 
   async remove(id: string) {
     const removed = await this.alocacoesRepository.delete(id);
-    if (!removed) throw new BadRequestException('alocacão não existe;');
+    if (!removed) throw new BadRequestException('Alocacão não existe.');
   }
 }
