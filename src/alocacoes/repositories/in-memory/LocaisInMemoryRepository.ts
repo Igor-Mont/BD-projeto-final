@@ -2,17 +2,32 @@ import { CreateAlocacaoDto } from '@src/alocacoes/dto/create-alocacao.dto';
 import { UpdateAlocacaoDto } from '@src/alocacoes/dto/update-alocacao.dto';
 
 import { Alocacao } from '../../entities/alocacao.entity';
-import { IAlocacoesRepository } from '../IAlocacoesPrismaRepository';
+import {
+  AlocacaoResult,
+  IAlocacoesRepository,
+} from '../IAlocacoesPrismaRepository';
 
 export class AlocacoesInMemoryRepository implements IAlocacoesRepository {
-  alocacoes: Alocacao[] = [];
+  private alocacoes: Alocacao[] = [];
 
-  async create(createAlocacaoDto: CreateAlocacaoDto): Promise<Alocacao> {
+  async create(createAlocacaoDto: CreateAlocacaoDto): Promise<AlocacaoResult> {
+    const findDuplicate = this.alocacoes.find((alocacao) => {
+      if (
+        alocacao.horario_id === createAlocacaoDto.horario_id &&
+        alocacao.local_id === createAlocacaoDto.local_id
+      )
+        return true;
+    });
+
+    if (findDuplicate) {
+      return { error: 'conflict' } as AlocacaoResult;
+    }
+
     const newAlocacao = new Alocacao();
     Object.assign(newAlocacao, { ...createAlocacaoDto });
     newAlocacao.id = '0';
     this.alocacoes.push(newAlocacao);
-    return newAlocacao;
+    return { alocacao: newAlocacao } as AlocacaoResult;
   }
 
   async findAll(): Promise<Alocacao[]> {
@@ -39,13 +54,26 @@ export class AlocacoesInMemoryRepository implements IAlocacoesRepository {
   async update(
     id: string,
     updateAlocacaoDto: UpdateAlocacaoDto,
-  ): Promise<Alocacao | null> {
+  ): Promise<AlocacaoResult> {
     const alocacaoToBeUpdated = (await this.findOne(id)) as Alocacao;
-    if (alocacaoToBeUpdated) {
-      Object.assign(alocacaoToBeUpdated, updateAlocacaoDto);
-
-      return alocacaoToBeUpdated;
+    if (!alocacaoToBeUpdated) {
+      return { error: 'bad request' };
     }
-    return null;
+
+    const findDuplicate = this.alocacoes.find((alocacao) => {
+      if (
+        alocacao.horario_id === updateAlocacaoDto.horario_id &&
+        alocacao.local_id === updateAlocacaoDto.local_id
+      )
+        return true;
+    });
+
+    if (findDuplicate) {
+      return { error: 'conflict' } as AlocacaoResult;
+    }
+
+    Object.assign(alocacaoToBeUpdated, updateAlocacaoDto);
+
+    return { alocacao: alocacaoToBeUpdated } as AlocacaoResult;
   }
 }

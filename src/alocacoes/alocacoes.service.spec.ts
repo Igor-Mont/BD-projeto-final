@@ -1,4 +1,8 @@
-import { NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { AlocacoesService } from './alocacoes.service';
 import { CreateAlocacaoDto } from './dto/create-alocacao.dto';
@@ -24,7 +28,6 @@ describe('alocacoesService', () => {
 
   it('should be able create a alocacao', async () => {
     const alocacao = await alocacoesService.create(makeFakeAlocacaoDto());
-
     expect(alocacao).toHaveProperty('id');
   });
 
@@ -32,8 +35,8 @@ describe('alocacoesService', () => {
     await alocacoesService.create(makeFakeAlocacaoDto());
 
     await alocacoesService.create({
-      horario_id: 'uuid',
-      local_id: 'uuid',
+      horario_id: 'uuid2',
+      local_id: 'uuid2',
     });
 
     const alocacoes = await alocacoesService.findAll();
@@ -70,34 +73,46 @@ describe('alocacoesService', () => {
   });
 
   it('should be able to update one alocacao by id', async () => {
-    const alocacao = await alocacoesService.create(makeFakeAlocacaoDto());
+    const newAlocacao = await alocacoesService.create(makeFakeAlocacaoDto());
 
     const UpdateAlocacaoDto = {
       horario_id: 'uuid2',
       local_id: 'uuid2',
     } as UpdateAlocacaoDto;
 
-    const { id, ...updatedHorario } = await alocacoesService.update(
-      alocacao.id,
+    const { id, ...updatedAlocacao } = await alocacoesService.update(
+      newAlocacao.id,
       UpdateAlocacaoDto,
     );
 
-    expect(updatedHorario).toEqual({
+    expect(updatedAlocacao).toEqual({
       horario_id: 'uuid2',
       local_id: 'uuid2',
     });
   });
 
   it('should not be able to update one local if local not exists', async () => {
+    const dto1 = makeFakeAlocacaoDto();
+    await alocacoesService.create(dto1);
+
+    const dto2 = makeFakeAlocacaoDto();
+    dto2.horario_id = 'uuid2';
+    dto2.local_id = 'uuid2';
+    await alocacoesService.create(dto2);
+
     const updateAlocacaoDto = {
       horario_id: 'uuid',
       local_id: 'uuid',
     } as UpdateAlocacaoDto;
 
-    const updatedAlocacao = await expect(
+    await expect(
       alocacoesService.update('INVALID_ID', updateAlocacaoDto),
     ).rejects.toEqual(
-      new NotFoundException('Verifique se todos os ids são válidos.'),
+      new BadRequestException('Verifique se todos os ids são válidos.'),
+    );
+
+    await expect(alocacoesService.update('0', dto2)).rejects.toEqual(
+      new ConflictException('Horário de local já existe.'),
     );
   });
 });
