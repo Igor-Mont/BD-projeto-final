@@ -22,7 +22,7 @@ model Local {
   bairro     String     @db.VarChar(25)
   cidade     String     @db.VarChar(25)
   UF         String     @db.VarChar(2)
-  Alocacoes  Alocacao[]
+  alocacoes  Alocacao[]
 
   @@map("locais")
 }
@@ -42,4 +42,7 @@ model Alocacao {
   horario    Horario @relation(fields: [horario_id], references: [id])
   local_id   String  @db.Uuid()
   local      Local   @relation(fields: [local_id], references: [id])
+
+  @@unique([horario_id, local_id])
+  @@map("alocacoes")
 }
