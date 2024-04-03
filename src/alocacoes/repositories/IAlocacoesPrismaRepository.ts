@@ -2,10 +2,15 @@ import { CreateAlocacaoDto } from '../dto/create-alocacao.dto';
 import { UpdateAlocacaoDto } from '../dto/update-alocacao.dto';
 import { Alocacao } from '../entities/alocacao.entity';
 
+export interface AlocacaoResult {
+  alocacao?: Alocacao;
+  error?: string;
+}
+
 export abstract class IAlocacoesRepository {
   abstract create(
     createAlocacaoDto: CreateAlocacaoDto,
-  ): Promise<Alocacao | null>;
+  ): Promise<AlocacaoResult>;
 
   abstract findAll(): Promise<Alocacao[]>;
 
@@ -16,5 +21,5 @@ export abstract class IAlocacoesRepository {
   abstract update(
     id: string,
     updateAlocacaoDto: UpdateAlocacaoDto,
-  ): Promise<Alocacao | null>;
+  ): Promise<AlocacaoResult>;
 }
