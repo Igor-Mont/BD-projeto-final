@@ -19,6 +19,27 @@ export class HorariosPrismaRepository implements IHorariosRepository {
     return newHorario as Horario;
   }
 
+  async findByTime(horaInicial: Date, horaFinal: Date): Promise<boolean> {
+    const dadosEncontrados = await this.prismaService.horario.findFirst({
+      where: {
+        AND: [
+          {
+            hora_inicial: {
+              equals: horaInicial,
+            },
+          },
+          {
+            hora_final: {
+              equals: horaFinal,
+            },
+          },
+        ],
+      },
+    });
+
+    return dadosEncontrados !== null;
+  }
+
   async findAll(): Promise<Horario[]> {
     return await this.prismaService.horario.findMany({});
   }
