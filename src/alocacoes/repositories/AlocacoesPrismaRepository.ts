@@ -28,7 +28,6 @@ export class AlocacoesPrismaRepository implements IAlocacoesRepository {
 
       return { alocacao: newAlocacao as Alocacao };
     } catch (err: unknown) {
-      console.log(err);
       let error: string = '';
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === 'P2002') error = 'conflict';
