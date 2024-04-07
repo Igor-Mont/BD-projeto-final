@@ -2,10 +2,6 @@ import { CreateHorarioDto } from '@src/horarios/dto/create-horario.dto';
 import { UpdateHorarioDto } from '@src/horarios/dto/update-horario.dto';
 import { Horario } from '../../entities/horario.entity';
 import { IHorariosRepository } from '@src/horarios/repositories/IHorariosPrismaRepository';
-import { shallowEqual } from '../../../utils/shallow-equal';
-import { NotFoundException } from '@nestjs/common';
-
-type Optional<T> = { [K in keyof T]?: T[K] };
 
 export class HorariosInMemoryRepository implements IHorariosRepository {
   private horarios: Horario[] = [];
@@ -16,6 +12,11 @@ export class HorariosInMemoryRepository implements IHorariosRepository {
 
     this.horarios.push(newHorario);
     return newHorario;
+  }
+  
+  async findByTime(horaInicial: Date, horaFinal: Date): Promise<boolean> {
+    const dadosEncontrados = this.horarios.find((currentHorario) => currentHorario.hora_final === horaFinal && currentHorario.hora_inicial === horaInicial);
+    return dadosEncontrados !== undefined
   }
 
   async findAll(): Promise<Horario[]> {

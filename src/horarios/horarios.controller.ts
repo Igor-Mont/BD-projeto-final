@@ -33,6 +33,7 @@ export class HorariosController {
     description: 'Criado com sucesso.',
     type: Horario,
   })
+  @ApiConflictResponse({ description: "Este horário já foi cadastrado." })
   @ApiConflictResponse({ description: "Os horários devem estar em dias diferentes." })
   @ApiBadRequestResponse({ description: 'Payload incorreto.' })
   @Post()
