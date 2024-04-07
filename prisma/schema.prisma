@@ -39,9 +39,9 @@ model Horario {
 model Alocacao {
   id         String  @id(map: "pk_alocacoes") @default(uuid()) @db.Uuid()
   horario_id String  @db.Uuid()
-  horario    Horario @relation(fields: [horario_id], references: [id])
+  horario    Horario @relation(fields: [horario_id], references: [id], onDelete: Cascade)
   local_id   String  @db.Uuid()
-  local      Local   @relation(fields: [local_id], references: [id])
+  local      Local   @relation(fields: [local_id], references: [id], onDelete: Cascade)
 
   @@unique([horario_id, local_id])
   @@map("alocacoes")
