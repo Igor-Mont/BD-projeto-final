@@ -7,14 +7,12 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -24,7 +22,7 @@ import { UpdateHorarioDto } from './dto/update-horario.dto';
 import { Horario } from './entities/horario.entity';
 import { HorariosService } from './horarios.service';
 
-@ApiTags('Horarios')
+@ApiTags('Horários')
 @Controller('horarios')
 export class HorariosController {
   constructor(private readonly horariosService: HorariosService) {}
@@ -46,6 +44,7 @@ export class HorariosController {
   findAll() {
     return this.horariosService.findAll();
   }
+
   @ApiBadRequestResponse({ description: 'Parâmetro :id precisa ser um UUID.' })
   @ApiOkResponse({ description: 'Registro listado com sucesso.' })
   @Get(':id')

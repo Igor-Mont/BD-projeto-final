@@ -13,6 +13,7 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 
 import { IsUUIDPipe } from '../utils/pipes/is-uuid-pipe';
@@ -21,6 +22,7 @@ import { CreateAlocacaoDto } from './dto/create-alocacao.dto';
 import { UpdateAlocacaoDto } from './dto/update-alocacao.dto';
 import { Alocacao } from './entities/alocacao.entity';
 
+@ApiTags('Alocações')
 @Controller('alocacaos')
 export class AlocacoesController {
   constructor(private readonly alocacoesService: AlocacoesService) {}
